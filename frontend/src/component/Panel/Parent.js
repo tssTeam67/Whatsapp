@@ -8,7 +8,7 @@ import { loadUser } from "../../action/userAction";
 import UserProfile from "./profile/UserProfile";
 import DashBoard from "./dashboard/DashBoard";
 import DeliveryReport from "./report/DeliveryReport";
-import {useDispatch,useSelector} from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
 
 const Parent = () => {
   const dispatch = useDispatch();
@@ -44,7 +44,9 @@ const Parent = () => {
         {selectedItem === "MULTI MESSAGES" && (
           <MultiMessageForm uuid={user?.uuid} />
         )}
-        {selectedItem === "DELIVERY REPORT" && <DeliveryReport id={user?._id} />}
+        {selectedItem === "DELIVERY REPORT" && (
+          <DeliveryReport id={user?._id} />
+        )}
         {/* 
         {selectedItem === "RESET QR" && */}
       </Box>

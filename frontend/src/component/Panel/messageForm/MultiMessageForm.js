@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 import {
   Box,
   Flex,
@@ -14,26 +15,26 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import axios from "axios";
-import EmojiPicker, {
-  EmojiStyle,
-  SkinTones,
-  Theme,
-  Categories,
-  EmojiClickData,
-  Emoji,
-  SuggestionMode,
-  SkinTonePickerLocation,
-} from "emoji-picker-react";
+import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
 import { SendMessage } from "../../../action/messageAction";
 import { useDispatch } from "react-redux";
+import { SendFile } from "../../../action/fileAction";
 
-const MultiMessageForm = ({ uuid }) => {
+const SingleMessageForm = ({ uuid, id }) => {
   const toast = useToast();
   const dispatch = useDispatch();
   const [number, setNumber] = useState("");
   const [message, setMessage] = useState("");
   const [file, setFile] = useState(null);
   const [selectedEmoji, setSelectedEmoji] = useState("1f60a");
+  const [sendCounter, setSendCounter] = useState(0);
+
+  const timestamp = new Date().toISOString();
+  const suid = uuidv4();
+
+  const uniqueId = `${timestamp}_${suid}`;
+
+  console.log(uniqueId);
 
   function onClick(emojiData, event) {
     setMessage(
@@ -46,7 +47,19 @@ const MultiMessageForm = ({ uuid }) => {
   const handleSend = async (e) => {
     e.preventDefault();
 
+    setSendCounter((prevCounter) => prevCounter + 1);
+
     try {
+      if (sendCounter >= 150) {
+        toast({
+          title: "API Disabled",
+          description: "API is disabled. Please try again later.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+        return;
+      }
       if (!message) {
         const formData = new FormData();
         formData.append("file", file);
@@ -125,6 +138,14 @@ const MultiMessageForm = ({ uuid }) => {
           isClosable: true,
         });
       }
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("phone", `91${number}`);
+      formData.append("message", message);
+      await dispatch(SendFile(uniqueId, formData));
+
+      await dispatch(SendMessage(id, uniqueId, message));
     } catch (error) {
       console.error(error);
       toast({
@@ -136,6 +157,14 @@ const MultiMessageForm = ({ uuid }) => {
       });
     }
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSendCounter(0);
+    }, 2 * 60 * 60 * 1000);
+
+    return () => clearTimeout(timer);
+  }, [sendCounter]);
 
   return (
     <Grid templateColumns="repeat(2, 1fr)" gap={4}>
@@ -197,4 +226,4 @@ const MultiMessageForm = ({ uuid }) => {
   );
 };
 
-export default MultiMessageForm;
+export default SingleMessageForm;

@@ -20,7 +20,6 @@ const UserProfile = ({ profile }) => {
         p={4}
         boxShadow="lg"
       >
-     
         <Flex direction="column" align="center">
           <Circle size="100px" overflow="hidden">
             <Avatar name="" src="" size="full" />

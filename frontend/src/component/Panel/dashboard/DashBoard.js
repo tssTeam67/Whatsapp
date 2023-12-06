@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Box,
   Flex,
@@ -7,18 +7,17 @@ import {
   StatLabel,
   StatNumber,
   SimpleGrid,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 
 const DashBoard = () => {
-  // Hardcoded data for demonstration
   const data = [
-    { label: 'Total Users', value: 1000 },
-    { label: 'Total Orders', value: 500 },
-    { label: 'Total Revenue', value: 100000 },
-   
-    { label: 'New Customers', value: 200 },
-    { label: 'Pending Orders', value: 50 },
-    { label: 'Average Order Value', value: 200 },
+    { label: "Total Users", value: 1000 },
+    { label: "Total Orders", value: 500 },
+    { label: "Total Revenue", value: 100000 },
+
+    { label: "New Customers", value: 200 },
+    { label: "Pending Orders", value: 50 },
+    { label: "Average Order Value", value: 200 },
   ];
 
   return (
@@ -34,14 +33,12 @@ const DashBoard = () => {
         ))}
       </SimpleGrid>
 
-     
       <Flex mt={8} direction="column">
         <Heading size="md" mb={4}>
           Recent Activity
         </Heading>
-       
+
         <Box p={4} boxShadow="md" borderRadius="md" bg="white">
-         
           Example Recent Activity Content
         </Box>
       </Flex>

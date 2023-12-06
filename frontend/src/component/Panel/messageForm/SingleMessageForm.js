@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import {
   Box,
   Flex,
@@ -18,7 +18,7 @@ import axios from "axios";
 import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
 import { SendMessage } from "../../../action/messageAction";
 import { useDispatch } from "react-redux";
-import {SendFile} from "../../../action/fileAction";
+import { SendFile } from "../../../action/fileAction";
 
 const SingleMessageForm = ({ uuid, id }) => {
   const toast = useToast();
@@ -29,13 +29,11 @@ const SingleMessageForm = ({ uuid, id }) => {
   const [selectedEmoji, setSelectedEmoji] = useState("1f60a");
   const [sendCounter, setSendCounter] = useState(0);
 
+  const timestamp = new Date().toISOString();
+  const suid = uuidv4();
 
- 
-    const timestamp = new Date().toISOString(); 
-    const suid = uuidv4();
-  
-    const uniqueId = `${timestamp}_${suid}`;
-   
+  const uniqueId = `${timestamp}_${suid}`;
+
   console.log(uniqueId);
 
   function onClick(emojiData, event) {
@@ -145,10 +143,9 @@ const SingleMessageForm = ({ uuid, id }) => {
       formData.append("file", file);
       formData.append("phone", `91${number}`);
       formData.append("message", message);
-      await dispatch(SendFile(uniqueId,formData))
+      await dispatch(SendFile(uniqueId, formData));
 
-      
-      await dispatch(SendMessage(id,uniqueId, message));
+      await dispatch(SendMessage(id, uniqueId, message));
     } catch (error) {
       console.error(error);
       toast({
@@ -163,9 +160,8 @@ const SingleMessageForm = ({ uuid, id }) => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      // Allow the API to work again after 2 hours
       setSendCounter(0);
-    }, 2 * 60 * 60 * 1000); // 2 hours in milliseconds
+    }, 2 * 60 * 60 * 1000);
 
     return () => clearTimeout(timer);
   }, [sendCounter]);
