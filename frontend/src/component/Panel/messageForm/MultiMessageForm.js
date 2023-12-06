@@ -20,7 +20,7 @@ import { SendMessage } from "../../../action/messageAction";
 import { useDispatch } from "react-redux";
 import { SendFile } from "../../../action/fileAction";
 
-const SingleMessageForm = ({ uuid, id }) => {
+const MultiMessageForm = ({ uuid, id }) => {
   const toast = useToast();
   const dispatch = useDispatch();
   const [number, setNumber] = useState("");
@@ -226,4 +226,4 @@ const SingleMessageForm = ({ uuid, id }) => {
   );
 };
 
-export default SingleMessageForm;
+export default MultiMessageForm;
