@@ -7,10 +7,12 @@ const Message = require("../models/messageModel");
 
 module.exports.storeMessages = async (req, res) => {
   try {
-    const { message, phone } = req.body;
+    const { message, phoneNumber } = req.body;
+    console.log(message,phoneNumber)
 
     const id = req.params.id;
-    if (!message || !phone) {
+    const muid=req.params.muid;
+    if (!message || !phoneNumber) {
       return res.status(400).json({ error: "Enter all the required fields" });
     }
 
@@ -23,7 +25,7 @@ module.exports.storeMessages = async (req, res) => {
       user: id,
       message,
       muid: muid,
-      receiverNumber: phone,
+      receiverNumber: phoneNumber,
     });
 
     res.status(201).json({ userMessage });
@@ -39,10 +41,11 @@ module.exports.getMessages = async (req, res) => {
     if (!id) {
       return res.status(400).json({ error: "User ID is required" });
     }
-    const messages = await Message.find({ user: id }).populate(
-      "user",
-      "contact"
-    );
+    const messages = await Message.find({ user: id }).populate({
+      path: "user",
+      select: "contact"
+    });
+    
     if (!messages) {
       return res.status(404).json({ error: "Messages not found" });
     }

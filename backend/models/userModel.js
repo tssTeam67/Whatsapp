@@ -9,17 +9,8 @@ const userSchema = new mongoose.Schema({
     required: [true, "Enter your Name"],
   },
 
-  contact: {
-    type: String,
-    // required: [true, "Enter your contact"],
-    // unique: true,
-    // validate: {
-    //   validator: function (value) {
-    //     // Check if the value is a 10-digit number
-    //     return /^\d{10}$/.test(value.toString());
-    //   },
-    //   message: "Contact must be a 10-digit number",
-    // },
+  contact:{
+    type: String 
   },
   email: {
     type: String,

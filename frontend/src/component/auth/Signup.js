@@ -6,41 +6,42 @@ import {
   Button,
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  ChakraProvider,
   Flex,
   Spinner,
   useToast,
 } from "@chakra-ui/react";
-import { useNavigate,Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import {RegisterUser} from "../../action/userAction"
+import { useNavigate, Link } from "react-router-dom";
+// import { useDispatch } from "react-redux";
+// import { RegisterUser } from "../../action/userAction";
+import axios from "axios";
 
 function Signup() {
-  const dispatch = useDispatch();
-
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
   const toast = useToast();
-  const [companyName, setCompanyName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [companyName, setCompanyName] = useState();
+  const [email, setEmail] = useState();
+  const [contact,setContact]=useState();
+  const [password, setPassword] = useState();
+  const [confirmPassword, setConfirmPassword] = useState();
   const [loading, setLoading] = useState(false);
-  const [uuid,setUuid]=useState();
+  const [uuid, setUuid] = useState();
 
   const handleSignup = async (e) => {
     e.preventDefault();
     setLoading(true);
-    if (!email || !password || !companyName) {
+
+    if (!email || !password || !companyName || !uuid) {
       toast({
         title: "Fill the details correctly",
-
         status: "warning",
         duration: 1000,
         isClosable: true,
       });
+      setLoading(false);
       return;
     }
+
     if (password !== confirmPassword) {
       toast({
         title: "Password Not Matched",
@@ -48,22 +49,32 @@ function Signup() {
         duration: 1000,
         isClosable: true,
       });
+      setLoading(false);
       return;
     }
+
     try {
-      const formData = new FormData();
-      formData.set("email", email);
-      formData.set("password", password);
-      formData.set("companyName", companyName);
-      formData.set("uuid", uuid);
-     
-      await dispatch(RegisterUser(formData));
+      // const formData = new FormData();
+      const formData = {
+        email,
+        password,
+        companyName,
+        contact,
+        uuid,
+      };
+      // formData.set("email", email);
+      // formData.set("password", password);
+      // formData.set("companyName", companyName);
+      // formData.set("uuid", uuid);
+      // console.log("Form Data:", formData);
+      await axios.post("/api/signup", formData);
+
       setLoading(false);
       navigate("/login");
     } catch (err) {
       toast({
-        title: { err },
-        status: "warning",
+        title: `Error: ${err.response.data.message}`,
+        status: "error",
         duration: 9000,
         isClosable: true,
       });
@@ -73,14 +84,22 @@ function Signup() {
 
   return (
     <Flex height="100vh" alignItems="center" justifyContent="center">
-    <Box p={4} borderWidth="1px" borderRadius="lg" backgroundColor="rgba(255, 255, 255, 0.8)" boxShadow="0 4px 8px rgba(0, 0, 0, 0.1)">
-      <VStack spacing="4" align="center" p="8">
-        <FormControl id="companyName" isRequired>
-          <FormLabel>Company Name</FormLabel>
-          <Input
-            type="text"
-            placeholder="Enter your company name"
-          />
+      <Box
+        p={4}
+        borderWidth="1px"
+        borderRadius="lg"
+        backgroundColor="rgba(255, 255, 255, 0.8)"
+        boxShadow="0 4px 8px rgba(0, 0, 0, 0.1)"
+      >
+        <VStack spacing="4" align="center" p="8">
+          <FormControl id="companyName" isRequired>
+            <FormLabel>Company Name</FormLabel>
+            <Input
+              type="text"
+              placeholder="Enter your company name"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+            />
           </FormControl>
           <FormControl id="email" isRequired>
             <FormLabel>Email</FormLabel>
@@ -91,7 +110,16 @@ function Signup() {
               onChange={(e) => setEmail(e.target.value)}
             />
           </FormControl>
-          <FormControl  isRequired>
+          <FormControl id="email" isRequired>
+            <FormLabel>Contact</FormLabel>
+            <Input
+              type="number"
+              placeholder="Enter Your Contact Number"
+              value={contact}
+              onChange={(e) => setContact(e.target.value)}
+            />
+          </FormControl>
+          <FormControl id="uuid" isRequired>
             <FormLabel>Uuid</FormLabel>
             <Input
               type="text"
@@ -122,7 +150,9 @@ function Signup() {
             {loading ? <Spinner size="sm" /> : "SignUp"}
           </Button>
         </VStack>
-        <h1>All Ready Have Account <Link to='/login'>Click Here</Link></h1>
+        <h1>
+          Already have an account? <Link to="/login">Click Here</Link>
+        </h1>
       </Box>
     </Flex>
   );

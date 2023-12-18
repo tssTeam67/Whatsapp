@@ -1,10 +1,10 @@
 import {
-  LOGIN_FAIL,
-  LOGIN_REQUEST,
-  LOGIN_SUCCESS,
-  SIGNUP_REQUEST,
-  SIGNUP_SUCCESS,
-  SIGNUP_FAIL,
+  // LOGIN_FAIL,
+  // LOGIN_REQUEST,
+  // LOGIN_SUCCESS,
+  // SIGNUP_REQUEST,
+  // SIGNUP_SUCCESS,
+  // SIGNUP_FAIL,
   ALL_USER_REQUEST,
   ALL_USER_SUCCESS,
   ALL_USER_FAIL,
@@ -17,40 +17,44 @@ import {
 import axios from "axios";
 
 
-export const RegisterUser = (userData) => async (dispatch) => {
-  try {
-    dispatch({ type: SIGNUP_REQUEST });
+// export const RegisterUser = (userData) => async (dispatch) => {
 
-    const config = {
-      headers: {
-        "content-type": "application/json",
-      },
-    };
+//   userData.forEach((item)=>{
+//     console.log(item);
+//   })
+//   try {
+//     dispatch({ type: SIGNUP_REQUEST });
 
-    const { data } = await axios.post(`/api/signup`, userData, config);
+//     const config = {
+//       headers: {
+//         "content-type": "application/json",
+//       },
+//     };
 
-    dispatch({ type: SIGNUP_SUCCESS, payload: data.user });
-  } catch (error) {
-    dispatch({ type: SIGNUP_FAIL, payload: error.response.data.message });
-  }
-};
+//     const { data } = await axios.post(`/api/signup`, userData, config);
 
-export const LoginUser = (userData) => async (dispatch) => {
-  try {
-    dispatch({ type: LOGIN_REQUEST });
+//     dispatch({ type: SIGNUP_SUCCESS, payload: data.user });
+//   } catch (error) {
+//     dispatch({ type: SIGNUP_FAIL, payload: error.response.data.message });
+//   }
+// };
 
-    const config = {
-      headers: {
-        "content-type": "application/json",
-      },
-    };
+// export const LoginUser = (userData) => async (dispatch) => {
+//   try {
+//     dispatch({ type: LOGIN_REQUEST });
 
-    const { data } = await axios.post(`/api/login`, userData, config);
-    dispatch({ type: LOGIN_SUCCESS, payload: data.user });
-  } catch (error) {
-    dispatch({ type: LOGIN_FAIL, payload: error.response.data.message });
-  }
-};
+//     const config = {
+//       headers: {
+//         "content-type": "application/json",
+//       },
+//     };
+
+//     const { data } = await axios.post(`/api/login`, userData, config);
+//     dispatch({ type: LOGIN_SUCCESS, payload: data.user });
+//   } catch (error) {
+//     dispatch({ type: LOGIN_FAIL, payload: error.response.data.message });
+//   }
+// };
 
 
 // Load User

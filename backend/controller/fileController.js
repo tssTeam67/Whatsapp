@@ -3,13 +3,14 @@ const File = require('../models/fileModel');
 module.exports.uploadFile = async (req, res) => {
   try {
     const { originalname, mimetype, buffer } = req.file;
-    const id=req.params.id;
+    console.log(originalname, mimetype, buffer)
+    const muid=req.params.id;
 
     const file = new File({
       filename: originalname,
       contentType: mimetype,
       size: buffer.length,
-      muid:id,
+      muid:muid,
       data: buffer,
     });
 

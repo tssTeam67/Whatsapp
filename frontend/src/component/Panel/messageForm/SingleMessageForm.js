@@ -19,15 +19,19 @@ import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
 import { SendMessage } from "../../../action/messageAction";
 import { useDispatch } from "react-redux";
 import { SendFile } from "../../../action/fileAction";
+import Papa from "papaparse";
 
 const SingleMessageForm = ({ uuid, id }) => {
   const toast = useToast();
   const dispatch = useDispatch();
-  const [number, setNumber] = useState("");
+  const [number, setNumber] = useState([]);
   const [message, setMessage] = useState("");
   const [file, setFile] = useState(null);
-  const [selectedEmoji, setSelectedEmoji] = useState("1f60a");
+  const [selectedEmoji, setSelectedEmoji] = useState("");
   const [sendCounter, setSendCounter] = useState(0);
+  const [data, setData] = useState();
+
+  const [setValues] = useState([]);
 
   const timestamp = new Date().toISOString();
   const suid = uuidv4();
@@ -35,7 +39,7 @@ const SingleMessageForm = ({ uuid, id }) => {
   const uniqueId = `${timestamp}_${suid}`;
 
   console.log(uniqueId);
-
+  console.log(number);
   function onClick(emojiData, event) {
     setMessage(
       (inputValue) =>
@@ -60,10 +64,14 @@ const SingleMessageForm = ({ uuid, id }) => {
         });
         return;
       }
+      const numbersArray = number.split(",");
       if (!message) {
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("phone", `91${number}`);
+        const phoneNumber = numbersArray
+          .map((number) => `91${number}`)
+          .join(",");
+        formData.append("phone", phoneNumber);
 
         const config = {
           headers: {
@@ -89,7 +97,10 @@ const SingleMessageForm = ({ uuid, id }) => {
       } else if (!file) {
         const formData = new FormData();
         formData.append("id", uuid);
-        formData.append("phone", `91${number}`);
+        const phoneNumber = numbersArray
+          .map((number) => `91${number}`)
+          .join(",");
+        formData.append("phone", phoneNumber);
         formData.append("message", message);
         const config = {
           headers: {
@@ -97,7 +108,7 @@ const SingleMessageForm = ({ uuid, id }) => {
           },
         };
 
-        const response = await axios.post(
+        await axios.post(
           `https://messagesapi.co.in/chat/sendmessage`,
           formData,
           config
@@ -113,7 +124,10 @@ const SingleMessageForm = ({ uuid, id }) => {
       } else {
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("phone", `91${number}`);
+        const phoneNumber = numbersArray
+          .map((number) => `91${number}`)
+          .join(",");
+        formData.append("phone", phoneNumber);
         formData.append("message", message);
 
         const config = {
@@ -139,13 +153,19 @@ const SingleMessageForm = ({ uuid, id }) => {
         });
       }
 
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("phone", `91${number}`);
-      formData.append("message", message);
-      await dispatch(SendFile(uniqueId, formData));
+      const phoneNumber = numbersArray.map((number) => `91${number}`).join(",");
 
-      await dispatch(SendMessage(id, uniqueId, message));
+      const messageData = {
+        message,
+        phoneNumber,
+      };
+      const response1 = await axios.post(
+        `/api/store/message/${id}/${uniqueId}`,
+        messageData
+      );
+      // const files={file}
+      // const response2 = await axios.post(`/api/upload/${uniqueId}`, files);
+     
     } catch (error) {
       console.error(error);
       toast({
@@ -156,6 +176,26 @@ const SingleMessageForm = ({ uuid, id }) => {
         isClosable: true,
       });
     }
+  };
+
+   const handleFileChange = (event) => {
+  //   const file = event.target.files[0];
+
+  //   Papa.parse(file, {
+  //     header: true,
+  //     skipEmptyLines: true,
+  //     complete: function (result) {
+  //       const valuesArray = [];
+
+  //       result.data.forEach((d) => {
+  //         valuesArray.push(Object.values(d));
+  //       });
+
+  //       setData(result.data);
+
+  //       setValues(valuesArray);
+  //     },
+  //   });
   };
 
   useEffect(() => {
@@ -172,7 +212,12 @@ const SingleMessageForm = ({ uuid, id }) => {
         <Flex direction="column" maxW="400px" mx="auto">
           <VStack spacing={4}>
             <FormControl>
+              <FormLabel>Upload File:</FormLabel>
+              <Input type="file" accept=".csv" onChange={handleFileChange} />
+            </FormControl>
+            <FormControl>
               <FormLabel>Phone No.</FormLabel>
+
               <Input
                 type="tel"
                 placeholder="Enter your phone number"

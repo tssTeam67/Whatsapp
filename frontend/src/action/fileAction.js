@@ -13,7 +13,7 @@ import {
   
       const config = {
         headers: {
-          "content-type": "application/json",
+          "content-type": "multipart/form-data",
         },
       };
   

@@ -1,7 +1,7 @@
 import {
-  SENDMESSAGES_REQUEST,
-  SENDMESSAGES_SUCCESS,
-  SENDMESSAGES_FAIL,
+  // SENDMESSAGES_REQUEST,
+  // SENDMESSAGES_SUCCESS,
+  // SENDMESSAGES_FAIL,
   GETMESSAGES_REQUEST,
   GETMESSAGES_SUCCESS,
   GETMESSAGES_FAIL,
@@ -10,27 +10,27 @@ import {
 
 import axios from "axios";
 
-export const SendMessage = (id,muid, message) => async (dispatch) => {
-  try {
-    dispatch({ type: SENDMESSAGES_REQUEST });
+// export const SendMessage = (id,muid,data) => async (dispatch) => {
+//   try {
+//     dispatch({ type: SENDMESSAGES_REQUEST });
 
-    const config = {
-      headers: {
-        "content-type": "application/json",
-      },
-    };
+//     const config = {
+//       headers: {
+//         "content-type": "application/json",
+//       },
+//     };
 
-    const { data } = await axios.post(
-      `/api/store/message/${id}/${muid}`,
-      message,
-      config
-    );
+//     const { data } = await axios.post(
+//       `/api/store/message/${id}/${muid}`,
+//       data,
+//       config
+//     );
 
-    dispatch({ type: SENDMESSAGES_SUCCESS, payload: data.response.userMessage });
-  } catch (error) {
-    dispatch({ type: SENDMESSAGES_FAIL, payload: error.response.data.message });
-  }
-};
+//     dispatch({ type: SENDMESSAGES_SUCCESS, payload: data.response.userMessage });
+//   } catch (error) {
+//     dispatch({ type: SENDMESSAGES_FAIL, payload: error.response.data.message });
+//   }
+// };
 
 
 export const getMessage = (id) => async (dispatch) => {

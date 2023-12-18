@@ -24,15 +24,28 @@ const App = () => {
     dispatch(loadUser());
   }, [dispatch]);
 
+  // const PrivateRoute = ({ element, ...rest }) => {
+  //   return isAuthenticated ? element : <Navigate to="/login" />;
+  // };
+
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login  isAuthenticated={isAuthenticated} />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/*" element={<Login />} />
         <Route path="/dashboard" element={<Parent />} />
+
+        {/* <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute isAuthenticated={isAuthenticated} isUser={user}>
+              <Parent />
+            </PrivateRoute>
+          }
+        /> */}
+
+        <Route path="/*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
   );

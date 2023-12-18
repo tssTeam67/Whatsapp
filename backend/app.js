@@ -13,8 +13,8 @@ app.use(cors());
 const user = require("./routes/userRoutes");
 const message=require("./routes/messageRoutes");
 const file=require("./routes/fileRoutes")
-app.use("/api/", user);
-app.use("/api/",message);
+app.use("/api", user);
+app.use("/api",message);
 app.use("/api",file);
 
 module.exports = app;

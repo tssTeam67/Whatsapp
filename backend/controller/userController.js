@@ -4,9 +4,10 @@ const ApiFeatures = require("../utils/apifeatures");
 const ErrorHandler = require("../utils/errorHandler");
 
 module.exports.registerUser = async (req, res, next) => {
-  const { email, companyName, password, uuid } = req.body;
+  const { email, companyName, password, uuid ,contact} = req.body;
+  console.log(email,password,uuid);
 
-  if (!companyName || !email || !password | !uuid) {
+  if (!companyName || !email || !password | !uuid || !contact) {
     return res.status(401).json({ message: "Please Enter all the Details" });
   }
 
@@ -23,6 +24,7 @@ module.exports.registerUser = async (req, res, next) => {
     email,
     password,
     uuid,
+    contact
   });
 
   sendToken(user, 200, res);
